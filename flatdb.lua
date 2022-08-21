@@ -1,19 +1,25 @@
 local mp = require("MessagePack")
 
-local function isFile(path)
-	local f = io.open(path, "r")
+--a function to check if a file exists
+--takes in the path as input
+--outputs true/false
+local function isFile(path) 
+	local f = io.open(path, "r") --opens the file
 	if f then
-		f:close()
+		f:close() --if the file is openable, file is closed without changing it, and thus returns True
 		return true
 	end
-	return false
+	return false --if the file cannot be opened, this means it doesn't exist (in this sense) and thus returns False
 end
 
+--a function to check if a directory exists
+--takes in the path as input
+--outputs true/false
 local function isDir(path)
-	path = string.gsub(path.."/", "//", "/")
-	local ok, err, code = os.rename(path, path)
-	if ok or code == 13 then
-		return true
+	path = string.gsub(path.."/", "//", "/") --adds "/" at the end of path, and then substitutes all "//"s for "/"s (prev. syntax errors)
+	local ok, err, code = os.rename(path, path) --attempts to rename the path with the path (basically tries to access but not change anything)
+	if ok or code == 13 then --"ok" means the os.rename worked, not sure about code 13 though...
+		return true 
 	end
 	return false
 end
